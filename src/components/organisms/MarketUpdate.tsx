@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 
+interface MarketItem {
+    symbol: string;
+    last: number;
+    percentChange: number;
+}
+
 export default function MarketUpdate() {
-    const [marketData, setMarketData] = useState([]);
+    const [marketData, setMarketData] = useState<MarketItem[]>([]);
     const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
@@ -20,8 +26,8 @@ export default function MarketUpdate() {
                 const data = await res.json();
 
                 const filteredData = data
-                    .filter(item => item.symbol && typeof item.last === 'number')
-                    .map(item => ({
+                    .filter((item: any) => item.symbol && typeof item.last === 'number')
+                    .map((item: any) => ({
                         symbol: item.symbol,
                         last: item.last,
                         percentChange: item.percentChange,
@@ -29,7 +35,7 @@ export default function MarketUpdate() {
 
                 setMarketData(filteredData);
                 setErrorMessage(""); // clear error
-            } catch (error) {
+            } catch (error: any) {
                 console.error('Fetch gagal:', error);
                 setErrorMessage(error.message || "Gagal memuat data");
                 setMarketData([]);
@@ -43,13 +49,13 @@ export default function MarketUpdate() {
         return () => clearInterval(interval);
     }, []);
 
-    const formatPrice = (symbol, price) => {
+    const formatPrice = (symbol: string, price: number): string => {
         if (symbol.includes('IDR')) return `Rp${price.toLocaleString('id-ID')}`;
         if (symbol.includes('BTC')) return `$${price.toLocaleString('en-US')}`;
         return `$${price.toFixed(2)}`;
     };
 
-    const formatPercent = (percent) => {
+    const formatPercent = (percent: number): string => {
         const formatted = percent?.toFixed(2);
         const sign = percent > 0 ? '+' : '';
         return `${sign}${formatted}%`;

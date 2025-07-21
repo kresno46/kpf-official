@@ -6,7 +6,7 @@ interface ModalPopupProps {
     children: React.ReactNode;
 }
 
-export default function ModalPopup({ isOpen, onClose, children }) {
+export default function ModalPopup({ isOpen, onClose, children }: ModalPopupProps) {
     const [visible, setVisible] = useState(isOpen);
 
     useEffect(() => {
